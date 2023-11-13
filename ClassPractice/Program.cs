@@ -55,8 +55,15 @@ namespace ClassPractice
             Console.WriteLine("당신의 현재 정보를 표시합니다.");
             Console.WriteLine();
             Console.WriteLine($"LV.{player.Level}");
-            Console.WriteLine($"{player.Name}{player.Job}");
-            Console.WriteLine($"공격력 : {player.Atk}");
+            Console.WriteLine($"{player.Name} ({player.Job})");
+            if (!earlyItem.Equipment)
+            {
+                Console.WriteLine($"공격력 : {player.Atk}");
+            }
+            else
+            {
+                Console.WriteLine($"공격력 : {player.Atk}  (+{earlyItem.Figure})");
+            }
             Console.WriteLine($"방어력 : {player.Def}");
             Console.WriteLine($"체력 : {player.Hp}");
             Console.WriteLine($"소지금 : {player.Gold}");
@@ -80,7 +87,7 @@ namespace ClassPractice
             Console.WriteLine("현재 가지고 있는 물건의 목록입니다.");
             Console.WriteLine();
             Console.WriteLine("이름    |수치        |설명");
-            if (earlyItem.Equipment != true)
+            if (!earlyItem.Equipment)
             {
                 Console.WriteLine($"{earlyItem.Name}    |{earlyItem.Category} +{earlyItem.Figure}|{earlyItem.Explanation}");
 
@@ -130,7 +137,7 @@ namespace ClassPractice
             Console.WriteLine("소지하고 있는 장비를 장착하거나 해제합니다.");
             Console.WriteLine();
             Console.WriteLine("이름    |수치        |설명");
-            if (earlyItem.Equipment != true)
+            if (!earlyItem.Equipment)
             {
                 Console.WriteLine($"{earlyItem.Name}    |{earlyItem.Category} +{earlyItem.Figure}|{earlyItem.Explanation}");
             }
@@ -148,7 +155,7 @@ namespace ClassPractice
                     DisplayInventory();
                     break;
                 case 1:
-                    if (earlyItem.Equipment != true)
+                    if (!earlyItem.Equipment)
                     {
                         earlyItem.Equipment = true;
                         player.Atk += earlyItem.Figure;
