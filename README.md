@@ -1,5 +1,7 @@
 # Text_Game
 반복문, 조건문, 클래스를 이용한 텍스트 게임
+
+게임시작화면, 인벤토리, 장착관리, 상태보기 구현
 ```
 using System.Security.Cryptography.X509Certificates;
 
