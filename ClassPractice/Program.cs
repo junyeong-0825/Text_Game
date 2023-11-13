@@ -4,13 +4,14 @@ namespace ClassPractice
 {
     internal class Program
     {
+
         private static Player player;
         private static Inventory earlyItem;
 
         static void Main(string[] args)
         {
             GameDataSetting();
-            DisplayGate();
+            PrintStartLogo();
            
         }
        
@@ -46,6 +47,20 @@ namespace ClassPractice
         {
             player = new Player("□□□", "탐험가", 1, 10, 5, 100, 1500);
             earlyItem = new Inventory(false,"001","짱돌","공격력", 5, "흔하게 널린 돌");
+        }
+        static void PrintStartLogo()
+        {
+            Console.Clear();
+
+            Console.WriteLine(" ********                                                 **    ");
+            Console.WriteLine("/**/////                         ******                  /**    ");
+            Console.WriteLine("/**       **   ** *******       /**///**  ******   ******/**  **");
+            Console.WriteLine("/******* /**  /**//**///**      /**  /** //////** //**//*/** ** ");
+            Console.WriteLine("/**////  /**  /** /**  /**      /******   *******  /** / /****  ");
+            Console.WriteLine("/**      /**  /** /**  /**      /**///   **////**  /**   /**/** ");
+            Console.WriteLine("/**      //****** ***  /**      /**     //********/***   /**//**");
+            Console.WriteLine("//        ////// ///   //       //       //////// ///    //  // ");
+
         }
         static void DisplayMyInfo()
         {
