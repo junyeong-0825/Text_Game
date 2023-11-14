@@ -66,6 +66,7 @@ namespace ClassPractice
             Console.WriteLine("/**      //****** ***  /**      /**     //********/***   /**//**");
             Console.WriteLine("//        ////// ///   //       //       //////// ///    //  // ");
 
+            Console.ReadKey();
         }
         static void DisplayMyInfo()
         {
@@ -76,15 +77,7 @@ namespace ClassPractice
             Console.WriteLine();
             PrintTextWithHighlights("LV. ", player.Level.ToString("00"));//01, 07 과 같이 10미만의 수도 두자리로 출력
             Console.WriteLine($"{player.Name} ({player.Job})");
-            if (!item.Equipment)
-            {
-                PrintTextWithHighlights("공격력 :", player.Atk.ToString());
-            }
-            else
-            {
-
-                Console.WriteLine($"공격력 : {player.Atk}  (+{item.Figure})");
-            }
+            PrintTextWithHighlights("공격력 :", player.Atk.ToString());
             PrintTextWithHighlights("방어력 :", player.Def.ToString());
             PrintTextWithHighlights("체력 :", player.Hp.ToString());
             PrintTextWithHighlights("소지금 :", player.Gold.ToString());
@@ -104,19 +97,13 @@ namespace ClassPractice
         {
             Console.Clear();
 
-            ShowHighlightedText("◆ 소지품 확인 ◆");
+            Showhighlightedtext("◆ 소지품 확인 ◆");
             Console.WriteLine("현재 가지고 있는 물건의 목록입니다.");
             Console.WriteLine();
-            Console.WriteLine("이름    |수치        |설명");
-            if (!item.Equipment)
+            Console.WriteLine("[아이템 목록]");
+            for(int i = 0; i<Item.ItemCnt; i++)
             {
-                Console.WriteLine($"{item.Name}    |{item.Category} +{item.Figure}|{item.Explanation}");
-
-            }
-            else
-            {
-                Console.WriteLine($"[E]{item.Name}    |{item.Category} +{item.Figure}|{item.Explanation}");
-
+                items[i].PrintItemStatDescription();
             }
             Console.WriteLine();
             Console.WriteLine("1. 장착하기");
@@ -128,9 +115,9 @@ namespace ClassPractice
                 case 0:
                     DisplayGate();
                     break;
-                case 1:
-                    ItemEquipment();
-                    break;
+                //case 1:
+                //    ItemEquipment();
+                //    break;
                 
             }
         }
@@ -150,48 +137,48 @@ namespace ClassPractice
                 Console.WriteLine($"지정된 범위의 숫자를 입력해 주세요.({min}~{max})");
             }
         }
-        static void ItemEquipment()//아이템 장착 여부 확인
-        {
-            Console.Clear();
+        //static void itemequipment()//아이템 장착 여부 확인
+        //{
+        //    console.clear();
 
-            Console.WriteLine("장비 장착");
-            Console.WriteLine("소지하고 있는 장비를 장착하거나 해제합니다.");
-            Console.WriteLine();
-            Console.WriteLine("이름    |수치        |설명");
-            if (!item.Equipment)
-            {
-                Console.WriteLine($"{item.Name}    |{item.Category} +{item.Figure}|{item.Explanation}");
-            }
-            else
-            {
-                Console.WriteLine($"[E]{item.Name}    |{item.Category} +{item.Figure}|{item.Explanation}");
-            }
-            Console.WriteLine($"1. {item.Name}");
-            Console.WriteLine("0. 돌아가기");
+        //    console.writeline("장비 장착");
+        //    console.writeline("소지하고 있는 장비를 장착하거나 해제합니다.");
+        //    console.writeline();
+        //    console.writeline("이름    |수치        |설명");
+        //    if (!item.equipment)
+        //    {
+        //        console.writeline($"{item.name}    |{item.category} +{item.figure}|{item.explanation}");
+        //    }
+        //    else
+        //    {
+        //        console.writeline($"[e]{item.name}    |{item.category} +{item.figure}|{item.explanation}");
+        //    }
+        //    console.writeline($"1. {item.name}");
+        //    console.writeline("0. 돌아가기");
 
-            int input = CheckVaildInput(0, 1);
-            switch (input)
-            {
-                case 0:
-                    DisplayInventory();
-                    break;
-                case 1:
-                    if (!item.Equipment)
-                    {
-                        item.Equipment = true;
-                        player.Atk += item.Figure;
-                    }
-                    else
-                    {
-                        item.Equipment = false;
-                        player.Atk -= item.Figure;
-                    }
-                    ItemEquipment();
-                    break;
+        //    int input = checkvaildinput(0, 1);
+        //    switch (input)
+        //    {
+        //        case 0:
+        //            displayinventory();
+        //            break;
+        //        case 1:
+        //            if (!item.equipment)
+        //            {
+        //                item.equipment = true;
+        //                player.atk += item.figure;
+        //            }
+        //            else
+        //            {
+        //                item.equipment = false;
+        //                player.atk -= item.figure;
+        //            }
+        //            itemequipment();
+        //            break;
 
-            }
-        }
-        private static void ShowHighlightedText(string text)//해당 문장을 마젠타 색으로 출력
+        //    }
+        //}
+        private static void Showhighlightedtext(string text)//해당 문장을 마젠타 색으로 출력
         {
             Console.ForegroundColor = ConsoleColor.Magenta;
             Console.WriteLine(text);
