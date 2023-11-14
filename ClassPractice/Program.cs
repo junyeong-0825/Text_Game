@@ -72,7 +72,7 @@ namespace ClassPractice
         {
             Console.Clear();
 
-            Console.WriteLine("◆ 상태확인 ◆");
+            Showhighlightedtext("◆ 상태확인 ◆");
             Console.WriteLine("당신의 현재 정보를 표시합니다.");
             Console.WriteLine();
             PrintTextWithHighlights("LV. ", player.Level.ToString("00"));//01, 07 과 같이 10미만의 수도 두자리로 출력
@@ -106,7 +106,7 @@ namespace ClassPractice
                 items[i].PrintItemStatDescription();
             }
             Console.WriteLine();
-            Console.WriteLine("1. 장착하기");
+            Console.WriteLine("1. 장착관리");
             Console.WriteLine("0. 나가기");
 
             int input = CheckVaildInput(0, 1);
@@ -115,10 +115,10 @@ namespace ClassPractice
                 case 0:
                     DisplayGate();
                     break;
-                //case 1:
-                //    ItemEquipment();
-                //    break;
-                
+                case 1:
+                    ItemEquipment();
+                    break;
+
             }
         }
         static int CheckVaildInput(int min, int max)
@@ -137,47 +137,39 @@ namespace ClassPractice
                 Console.WriteLine($"지정된 범위의 숫자를 입력해 주세요.({min}~{max})");
             }
         }
-        //static void itemequipment()//아이템 장착 여부 확인
-        //{
-        //    console.clear();
+        static void ItemEquipment()//아이템 장착 여부 확인
+        {
+            Console.Clear();
 
-        //    console.writeline("장비 장착");
-        //    console.writeline("소지하고 있는 장비를 장착하거나 해제합니다.");
-        //    console.writeline();
-        //    console.writeline("이름    |수치        |설명");
-        //    if (!item.equipment)
-        //    {
-        //        console.writeline($"{item.name}    |{item.category} +{item.figure}|{item.explanation}");
-        //    }
-        //    else
-        //    {
-        //        console.writeline($"[e]{item.name}    |{item.category} +{item.figure}|{item.explanation}");
-        //    }
-        //    console.writeline($"1. {item.name}");
-        //    console.writeline("0. 돌아가기");
+            Showhighlightedtext("◆ 인벤토리 - 장비 관리 ◆");
+            Console.WriteLine("소지하고 있는 장비를 장착하거나 해제합니다.");
+            Console.WriteLine();
+            Console.WriteLine("[아이템 목록]");
+            for(int i = 0; i <Item.ItemCnt;i++)
+            {
+                items[i].PrintItemStatDescription(true, i+1);
+            }
+            Console.WriteLine();
+            Console.WriteLine("0. 나가기");
 
-        //    int input = checkvaildinput(0, 1);
-        //    switch (input)
-        //    {
-        //        case 0:
-        //            displayinventory();
-        //            break;
-        //        case 1:
-        //            if (!item.equipment)
-        //            {
-        //                item.equipment = true;
-        //                player.atk += item.figure;
-        //            }
-        //            else
-        //            {
-        //                item.equipment = false;
-        //                player.atk -= item.figure;
-        //            }
-        //            itemequipment();
-        //            break;
+            int input = CheckVaildInput(0, Item.ItemCnt);
+            switch (input)
+            {
+                case 0:
+                    DisplayInventory();
+                    break;
+                default:
+                    ToggleEquipStatus(input - 1); //유저의 입력은 1, 2, 3... /  실제 배열에는 0, 1, 2..
+                    ItemEquipment(); //장착여부를 ㅘㄱ인 하고 나갈수 있도록 다시 부름
+                    break;
+            }
+        }
 
-        //    }
-        //}
+        private static void ToggleEquipStatus(int idx)
+        {
+            items[idx].Equipment = !items[idx].Equipment;
+        }
+
         private static void Showhighlightedtext(string text)//해당 문장을 마젠타 색으로 출력
         {
             Console.ForegroundColor = ConsoleColor.Magenta;
@@ -244,7 +236,13 @@ namespace ClassPractice
             }
             public void PrintItemStatDescription(bool withNumber = false, int idx = 0)
             {
-                Console.Write("-");
+                Console.Write("- ");
+                if (withNumber)
+                {
+                    Console.ForegroundColor = ConsoleColor.DarkCyan;
+                    Console.Write("{0} ", idx);
+                    Console.ResetColor();
+                }
                 if (Equipment)
                 {
                     Console.Write("[");
