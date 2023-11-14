@@ -15,10 +15,10 @@ namespace ClassPractice
             ///2.로고 출력
             GameDataSetting();
             PrintStartLogo();
-           
+            DisplayGate();
         }
-       
 
+       
         static void DisplayGate()
         {
             Console.Clear();
@@ -149,7 +149,7 @@ namespace ClassPractice
                 Console.WriteLine($"지정된 범위의 숫자를 입력해 주세요.({min}~{max})");
             }
         }
-        static void ItemEquipment()
+        static void ItemEquipment()//아이템 장착 여부 확인
         {
             Console.Clear();
 
@@ -190,7 +190,12 @@ namespace ClassPractice
 
             }
         }
-
+        private static void ShowHighlightedText(string text)//해당 문장을 마젠타 색으로 출력
+        {
+            Console.ForegroundColor = ConsoleColor.Magenta;
+            Console.WriteLine(text);
+            Console.ResetColor();
+        }
         static void AddItem(Item item)
         {
             if (Item.ItemCnt == 30) return; //인벤토리에 아이템이 31개 있는경우 아무일도 일어나지 않음
