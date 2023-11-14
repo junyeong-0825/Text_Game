@@ -41,7 +41,7 @@ namespace ClassPractice
                     DisplayInventory();
                     break;
                 case 3:
-                    DisplayGate();
+                    
                     break;
                 
             }
@@ -49,7 +49,7 @@ namespace ClassPractice
         static void GameDataSetting()
         {
             player = new Player("□□□", "탐험가", 1, 10, 5, 100, 1500);
-            item = new Item(false, 1, "짱돌", "공격력", 5, "흔하게 널린 돌");
+            item = new Item(1, "짱돌", "공격력", 5, "흔하게 널린 돌");
         }
         static void PrintStartLogo()
         {
@@ -219,7 +219,7 @@ namespace ClassPractice
             public int Figure { get; }//아이템이 주는 수치
             public string Explanation {  get; }//아이템 설명
 
-            public Item (bool equip,int number, string name, string category, int figure, string explanation)
+            public Item (int number, string name, string category, int figure, string explanation, bool equip= false)
             {
                 Equipment = equip;
                 ItemNumber = number;
