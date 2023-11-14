@@ -41,7 +41,8 @@ namespace ClassPractice
                     DisplayInventory();
                     break;
                 case 3:
-                    
+                    Console.Clear();
+                    Showhighlightedtext("당신은 정신을 잃었다.");
                     break;
                 
             }
@@ -51,7 +52,7 @@ namespace ClassPractice
             player = new Player("수", "탐험가", 1, 10, 5, 100, 1500);
             items = new Item[30];
             AddItem(new Item(1, "짱돌", 5, 0, 0, "주변에서 흔하게 볼 수 있는 돌."));
-            AddItem(new Item(11, "두꺼운 겉옷", 0, 3, 20, "추운 날씨에 입기 안성맞춤인 두꺼운 겉옷."));
+            AddItem(new Item(11, "두꺼운 겉옷", 0, 3, 0, "추운 날씨에 입기 안성맞춤인 두꺼운 겉옷."));
         }
         static void PrintStartLogo()
         {
@@ -71,15 +72,18 @@ namespace ClassPractice
         static void DisplayMyInfo()
         {
             Console.Clear();
-
+            int bonusAtk = GetSumBonusAtk();
+            int bonusDef = GetSumBonusDef();
+            int bonusHp = GetSumBonusHp();
             Showhighlightedtext("◆ 상태확인 ◆");
             Console.WriteLine("당신의 현재 정보를 표시합니다.");
             Console.WriteLine();
             PrintTextWithHighlights("LV. ", player.Level.ToString("00"));//01, 07 과 같이 10미만의 수도 두자리로 출력
             Console.WriteLine($"{player.Name} ({player.Job})");
-            PrintTextWithHighlights("공격력 :", player.Atk.ToString());
-            PrintTextWithHighlights("방어력 :", player.Def.ToString());
-            PrintTextWithHighlights("체력 :", player.Hp.ToString());
+            
+            PrintTextWithHighlights("공격력 :", (player.Atk + bonusAtk).ToString(), bonusAtk > 0 ? string.Format("(+{0})",bonusAtk) : "");
+            PrintTextWithHighlights("방어력 :", (player.Def + bonusDef).ToString(), bonusDef > 0 ? string.Format("(+{0})", bonusDef) : "");
+            PrintTextWithHighlights("체력 :", (player.Hp + bonusHp).ToString(), bonusHp > 0 ? string.Format("(+{0})", bonusHp) : "");
             PrintTextWithHighlights("소지금 :", player.Gold.ToString());
             Console.WriteLine();
             Console.WriteLine("0. 나가기");
@@ -92,6 +96,33 @@ namespace ClassPractice
                     break;
                 
             }
+        }
+        private static int GetSumBonusAtk()
+        {
+            int sum = 0;
+            for (int i = 0; i < Item.ItemCnt; i++)
+            {
+                if (items[i].Equipment) sum += items[i].Atk;
+            }
+            return sum;
+        }
+        private static int GetSumBonusDef()
+        {
+            int sum = 0;
+            for (int i = 0; i < Item.ItemCnt; i++)
+            {
+                if (items[i].Equipment) sum += items[i].Def;
+            }
+            return sum;
+        }
+        private static int GetSumBonusHp()
+        {
+            int sum = 0;
+            for (int i = 0; i < Item.ItemCnt; i++)
+            {
+                if (items[i].Equipment) sum += items[i].Hp;
+            }
+            return sum;
         }
         static void DisplayInventory()
         {
