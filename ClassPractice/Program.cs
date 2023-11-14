@@ -5,8 +5,8 @@ namespace ClassPractice
     internal class Program
     {
 
-        private static Player player;
-        private static Item item;
+        static Player player;
+        static Item[] items;
 
         static void Main(string[] args)
         {
@@ -48,8 +48,10 @@ namespace ClassPractice
         }
         static void GameDataSetting()
         {
-            player = new Player("□□□", "탐험가", 1, 10, 5, 100, 1500);
-            item = new Item(1, "짱돌", "공격력", 5, "흔하게 널린 돌");
+            player = new Player("수", "탐험가", 1, 10, 5, 100, 1500);
+            items = new Item[30];
+            AddItem(new Item(1, "짱돌", 0, 5, "주변에서 흔하게 볼 수 있는 돌."));
+            AddItem(new Item(11, "두꺼운 겉옷", 1, 3, "추운 날씨에 입기 안성맞춤인 두꺼운 겉옷."));
         }
         static void PrintStartLogo()
         {
@@ -188,6 +190,13 @@ namespace ClassPractice
 
             }
         }
+
+        static void AddItem(Item item)
+        {
+            if (Item.ItemCnt == 30) return; //인벤토리에 아이템이 31개 있는경우 아무일도 일어나지 않음
+            items[Item.ItemCnt] = item; //0개 -> 0번 인덱스 / 1개 1번 인덱스
+            Item.ItemCnt++;
+        }
         class Player
         {
             public string Name { get; }
@@ -215,11 +224,13 @@ namespace ClassPractice
             public bool Equipment { get; set; }// 장착여부
             public int ItemNumber { get; }//아이템 ID
             public string Name { get; }//아이템 이름
-            public string Category { get; }//아이템 분류
+            public int Category { get; }//아이템 분류
             public int Figure { get; }//아이템이 주는 수치
             public string Explanation {  get; }//아이템 설명
+            
+            public static int ItemCnt = 0; //아이템의 수
 
-            public Item (int number, string name, string category, int figure, string explanation, bool equip= false)
+            public Item (int number, string name, int category, int figure, string explanation, bool equip= false)
             {
                 Equipment = equip;
                 ItemNumber = number;
