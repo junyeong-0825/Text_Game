@@ -50,8 +50,8 @@ namespace ClassPractice
         {
             player = new Player("수", "탐험가", 1, 10, 5, 100, 1500);
             items = new Item[30];
-            AddItem(new Item(1, "짱돌", 0, 5, "주변에서 흔하게 볼 수 있는 돌."));
-            AddItem(new Item(11, "두꺼운 겉옷", 1, 3, "추운 날씨에 입기 안성맞춤인 두꺼운 겉옷."));
+            AddItem(new Item(1, "짱돌", 5, 0, 0, "주변에서 흔하게 볼 수 있는 돌."));
+            AddItem(new Item(11, "두꺼운 겉옷", 0, 3, 20, "추운 날씨에 입기 안성맞춤인 두꺼운 겉옷."));
         }
         static void PrintStartLogo()
         {
@@ -71,7 +71,7 @@ namespace ClassPractice
         {
             Console.Clear();
 
-            Console.WriteLine("상태확인");
+            Console.WriteLine("◆ 상태확인 ◆");
             Console.WriteLine("당신의 현재 정보를 표시합니다.");
             Console.WriteLine();
             PrintTextWithHighlights("LV. ", player.Level.ToString("00"));//01, 07 과 같이 10미만의 수도 두자리로 출력
@@ -104,7 +104,7 @@ namespace ClassPractice
         {
             Console.Clear();
 
-            Console.WriteLine("소지품 확인");
+            ShowHighlightedText("◆ 소지품 확인 ◆");
             Console.WriteLine("현재 가지고 있는 물건의 목록입니다.");
             Console.WriteLine();
             Console.WriteLine("이름    |수치        |설명");
@@ -238,20 +238,44 @@ namespace ClassPractice
             public bool Equipment { get; set; }// 장착여부
             public int ItemNumber { get; }//아이템 ID
             public string Name { get; }//아이템 이름
-            public int Category { get; }//아이템 분류
-            public int Figure { get; }//아이템이 주는 수치
+            public int Atk { get; }//아이템이 주는 공격력
+            public int Def { get; }//아이템이 주는 공격력
+            public int Hp { get; }//아이템이 주는 공격력
             public string Explanation {  get; }//아이템 설명
             
             public static int ItemCnt = 0; //아이템의 수
 
-            public Item (int number, string name, int category, int figure, string explanation, bool equip= false)
+            public Item (int number, string name, int atk, int def, int hp, string explanation, bool equip= false)
             {
                 Equipment = equip;
                 ItemNumber = number;
                 Name = name;
-                Category = category;
-                Figure = figure;
+                Atk = atk;
+                Def = def;
+                Hp = hp;
                 Explanation = explanation;
+            }
+            public void PrintItemStatDescription(bool withNumber = false, int idx = 0)
+            {
+                Console.Write("-");
+                if (Equipment)
+                {
+                    Console.Write("[");
+                    Console.ForegroundColor = ConsoleColor.Red;
+                    Console.Write("E");
+                    Console.ResetColor();
+                    Console.Write("]");
+                }
+                Console.Write(Name);
+                Console.Write(" | ");
+                //(Atk >= 0 ? "+" : "") [조건 ? 조건이 참이면 : 조건이 거짓이면] 삼항연산자
+                if (Atk != 0) Console.Write($"공격력 {(Atk >= 0 ? "+" : "")}{Atk}");
+                if (Def != 0) Console.Write($"방어력 {(Def >= 0 ? "+" : "")}{Def}");
+                if (Hp != 0) Console.Write($"체력 {(Hp >= 0 ? "+" : "")}{Hp}");
+
+                Console.Write(" | ");
+
+                Console.WriteLine(Explanation);
             }
         }
 
