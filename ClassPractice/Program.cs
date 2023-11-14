@@ -74,19 +74,20 @@ namespace ClassPractice
             Console.WriteLine("상태확인");
             Console.WriteLine("당신의 현재 정보를 표시합니다.");
             Console.WriteLine();
-            Console.WriteLine($"LV.{player.Level}");
+            PrintTextWithHighlights("LV. ", player.Level.ToString("00"));//01, 07 과 같이 10미만의 수도 두자리로 출력
             Console.WriteLine($"{player.Name} ({player.Job})");
             if (!item.Equipment)
             {
-                Console.WriteLine($"공격력 : {player.Atk}");
+                PrintTextWithHighlights("공격력 :", player.Atk.ToString());
             }
             else
             {
+
                 Console.WriteLine($"공격력 : {player.Atk}  (+{item.Figure})");
             }
-            Console.WriteLine($"방어력 : {player.Def}");
-            Console.WriteLine($"체력 : {player.Hp}");
-            Console.WriteLine($"소지금 : {player.Gold}");
+            PrintTextWithHighlights("방어력 :", player.Def.ToString());
+            PrintTextWithHighlights("체력 :", player.Hp.ToString());
+            PrintTextWithHighlights("소지금 :", player.Gold.ToString());
             Console.WriteLine();
             Console.WriteLine("0. 나가기");
 
