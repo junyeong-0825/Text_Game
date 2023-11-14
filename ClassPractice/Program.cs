@@ -196,6 +196,14 @@ namespace ClassPractice
             Console.WriteLine(text);
             Console.ResetColor();
         }
+        private static void PrintTextWithHighlights(string s1, string s2, string s3 = "")
+        {
+            Console.Write(s1);
+            Console.ForegroundColor = ConsoleColor.Yellow;
+            Console.Write(s2);
+            Console.ResetColor();
+            Console.WriteLine(s3);
+        }
         static void AddItem(Item item)
         {
             if (Item.ItemCnt == 30) return; //인벤토리에 아이템이 31개 있는경우 아무일도 일어나지 않음
