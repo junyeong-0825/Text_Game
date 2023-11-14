@@ -4,17 +4,21 @@ namespace ClassPractice
 {
     internal class Program
     {
-        private static Player player;
-        private static Inventory earlyItem;
+
+        static Player player;
+        static Item[] items;
 
         static void Main(string[] args)
         {
+            ///구성
+            ///1.초기데이터값세팅
+            ///2.로고 출력
             GameDataSetting();
+            PrintStartLogo();
             DisplayGate();
-           
         }
-       
 
+       
         static void DisplayGate()
         {
             Console.Clear();
@@ -37,36 +41,50 @@ namespace ClassPractice
                     DisplayInventory();
                     break;
                 case 3:
-                    DisplayGate();
+                    Console.Clear();
+                    Showhighlightedtext("당신은 정신을 잃었다.");
                     break;
                 
             }
         }
         static void GameDataSetting()
         {
-            player = new Player("□□□", "탐험가", 1, 10, 5, 100, 1500);
-            earlyItem = new Inventory(false,"001","짱돌","공격력", 5, "흔하게 널린 돌");
+            player = new Player("수", "탐험가", 1, 10, 5, 100, 1500);
+            items = new Item[30];
+            AddItem(new Item(1, "짱돌", 5, 0, 0, "주변에서 흔하게 볼 수 있는 돌."));
+            AddItem(new Item(11, "두꺼운 겉옷", 0, 3, 0, "추운 날씨에 입기 안성맞춤인 두꺼운 겉옷."));
+        }
+        static void PrintStartLogo()
+        {
+            Console.Clear();
+
+            Console.WriteLine(" ********                                                 **    ");
+            Console.WriteLine("/**/////                         ******                  /**    ");
+            Console.WriteLine("/**       **   ** *******       /**///**  ******   ******/**  **");
+            Console.WriteLine("/******* /**  /**//**///**      /**  /** //////** //**//*/** ** ");
+            Console.WriteLine("/**////  /**  /** /**  /**      /******   *******  /** / /****  ");
+            Console.WriteLine("/**      /**  /** /**  /**      /**///   **////**  /**   /**/** ");
+            Console.WriteLine("/**      //****** ***  /**      /**     //********/***   /**//**");
+            Console.WriteLine("//        ////// ///   //       //       //////// ///    //  // ");
+
+            Console.ReadKey();
         }
         static void DisplayMyInfo()
         {
             Console.Clear();
-
-            Console.WriteLine("상태확인");
+            int bonusAtk = GetSumBonusAtk();
+            int bonusDef = GetSumBonusDef();
+            int bonusHp = GetSumBonusHp();
+            Showhighlightedtext("◆ 상태확인 ◆");
             Console.WriteLine("당신의 현재 정보를 표시합니다.");
             Console.WriteLine();
-            Console.WriteLine($"LV.{player.Level}");
+            PrintTextWithHighlights("LV. ", player.Level.ToString("00"));//01, 07 과 같이 10미만의 수도 두자리로 출력
             Console.WriteLine($"{player.Name} ({player.Job})");
-            if (!earlyItem.Equipment)
-            {
-                Console.WriteLine($"공격력 : {player.Atk}");
-            }
-            else
-            {
-                Console.WriteLine($"공격력 : {player.Atk}  (+{earlyItem.Figure})");
-            }
-            Console.WriteLine($"방어력 : {player.Def}");
-            Console.WriteLine($"체력 : {player.Hp}");
-            Console.WriteLine($"소지금 : {player.Gold}");
+            
+            PrintTextWithHighlights("공격력 :", (player.Atk + bonusAtk).ToString(), bonusAtk > 0 ? string.Format("(+{0})",bonusAtk) : "");
+            PrintTextWithHighlights("방어력 :", (player.Def + bonusDef).ToString(), bonusDef > 0 ? string.Format("(+{0})", bonusDef) : "");
+            PrintTextWithHighlights("체력 :", (player.Hp + bonusHp).ToString(), bonusHp > 0 ? string.Format("(+{0})", bonusHp) : "");
+            PrintTextWithHighlights("소지금 :", player.Gold.ToString());
             Console.WriteLine();
             Console.WriteLine("0. 나가기");
 
@@ -79,26 +97,47 @@ namespace ClassPractice
                 
             }
         }
+        private static int GetSumBonusAtk()
+        {
+            int sum = 0;
+            for (int i = 0; i < Item.ItemCnt; i++)
+            {
+                if (items[i].Equipment) sum += items[i].Atk;
+            }
+            return sum;
+        }
+        private static int GetSumBonusDef()
+        {
+            int sum = 0;
+            for (int i = 0; i < Item.ItemCnt; i++)
+            {
+                if (items[i].Equipment) sum += items[i].Def;
+            }
+            return sum;
+        }
+        private static int GetSumBonusHp()
+        {
+            int sum = 0;
+            for (int i = 0; i < Item.ItemCnt; i++)
+            {
+                if (items[i].Equipment) sum += items[i].Hp;
+            }
+            return sum;
+        }
         static void DisplayInventory()
         {
             Console.Clear();
 
-            Console.WriteLine("소지품 확인");
+            Showhighlightedtext("◆ 소지품 확인 ◆");
             Console.WriteLine("현재 가지고 있는 물건의 목록입니다.");
             Console.WriteLine();
-            Console.WriteLine("이름    |수치        |설명");
-            if (!earlyItem.Equipment)
+            Console.WriteLine("[아이템 목록]");
+            for(int i = 0; i<Item.ItemCnt; i++)
             {
-                Console.WriteLine($"{earlyItem.Name}    |{earlyItem.Category} +{earlyItem.Figure}|{earlyItem.Explanation}");
-
-            }
-            else
-            {
-                Console.WriteLine($"[E]{earlyItem.Name}    |{earlyItem.Category} +{earlyItem.Figure}|{earlyItem.Explanation}");
-
+                items[i].PrintItemStatDescription();
             }
             Console.WriteLine();
-            Console.WriteLine("1. 장착하기");
+            Console.WriteLine("1. 장착관리");
             Console.WriteLine("0. 나가기");
 
             int input = CheckVaildInput(0, 1);
@@ -110,7 +149,7 @@ namespace ClassPractice
                 case 1:
                     ItemEquipment();
                     break;
-                
+
             }
         }
         static int CheckVaildInput(int min, int max)
@@ -125,50 +164,62 @@ namespace ClassPractice
                     if(ret >= min && ret <= max)
                         return ret;
                 }
-
                 Console.WriteLine("잘못된 입력입니다.");
+                Console.WriteLine($"지정된 범위의 숫자를 입력해 주세요.({min}~{max})");
             }
         }
-        static void ItemEquipment()
+        static void ItemEquipment()//아이템 장착 여부 확인
         {
             Console.Clear();
 
-            Console.WriteLine("장비 장착");
+            Showhighlightedtext("◆ 인벤토리 - 장비 관리 ◆");
             Console.WriteLine("소지하고 있는 장비를 장착하거나 해제합니다.");
             Console.WriteLine();
-            Console.WriteLine("이름    |수치        |설명");
-            if (!earlyItem.Equipment)
+            Console.WriteLine("[아이템 목록]");
+            for(int i = 0; i <Item.ItemCnt;i++)
             {
-                Console.WriteLine($"{earlyItem.Name}    |{earlyItem.Category} +{earlyItem.Figure}|{earlyItem.Explanation}");
+                items[i].PrintItemStatDescription(true, i+1);
             }
-            else
-            {
-                Console.WriteLine($"[E]{earlyItem.Name}    |{earlyItem.Category} +{earlyItem.Figure}|{earlyItem.Explanation}");
-            }
-            Console.WriteLine($"1. {earlyItem.Name}");
-            Console.WriteLine("0. 돌아가기");
+            Console.WriteLine();
+            Console.WriteLine("0. 나가기");
 
-            int input = CheckVaildInput(0, 1);
+            int input = CheckVaildInput(0, Item.ItemCnt);
             switch (input)
             {
                 case 0:
                     DisplayInventory();
                     break;
-                case 1:
-                    if (!earlyItem.Equipment)
-                    {
-                        earlyItem.Equipment = true;
-                        player.Atk += earlyItem.Figure;
-                    }
-                    else
-                    {
-                        earlyItem.Equipment = false;
-                        player.Atk -= earlyItem.Figure;
-                    }
-                    ItemEquipment();
+                default:
+                    ToggleEquipStatus(input - 1); //유저의 입력은 1, 2, 3... /  실제 배열에는 0, 1, 2..
+                    ItemEquipment(); //장착여부를 ㅘㄱ인 하고 나갈수 있도록 다시 부름
                     break;
-
             }
+        }
+
+        private static void ToggleEquipStatus(int idx)
+        {
+            items[idx].Equipment = !items[idx].Equipment;
+        }
+
+        private static void Showhighlightedtext(string text)//해당 문장을 마젠타 색으로 출력
+        {
+            Console.ForegroundColor = ConsoleColor.Magenta;
+            Console.WriteLine(text);
+            Console.ResetColor();
+        }
+        private static void PrintTextWithHighlights(string s1, string s2, string s3 = "")
+        {
+            Console.Write(s1);
+            Console.ForegroundColor = ConsoleColor.Yellow;
+            Console.Write(s2);
+            Console.ResetColor();
+            Console.WriteLine(s3);
+        }
+        static void AddItem(Item item)
+        {
+            if (Item.ItemCnt == 30) return; //인벤토리에 아이템이 31개 있는경우 아무일도 일어나지 않음
+            items[Item.ItemCnt] = item; //0개 -> 0번 인덱스 / 1개 1번 인덱스
+            Item.ItemCnt++;
         }
         class Player
         {
@@ -192,33 +243,58 @@ namespace ClassPractice
             }
         }
 
-        class Inventory
+        class Item
         {
             public bool Equipment { get; set; }// 장착여부
-            public string ItemNumber { get; }//아이템 ID
+            public int ItemNumber { get; }//아이템 ID
             public string Name { get; }//아이템 이름
-            public string Category { get; }//아이템 분류
-            public int Figure { get; }//아이템이 주는 수치
+            public int Atk { get; }//아이템이 주는 공격력
+            public int Def { get; }//아이템이 주는 공격력
+            public int Hp { get; }//아이템이 주는 공격력
             public string Explanation {  get; }//아이템 설명
+            
+            public static int ItemCnt = 0; //아이템의 수
 
-            public Inventory (bool equip,string number, string name, string category, int figure, string explanation)
+            public Item (int number, string name, int atk, int def, int hp, string explanation, bool equip= false)
             {
                 Equipment = equip;
                 ItemNumber = number;
                 Name = name;
-                Category = category;
-                Figure = figure;
+                Atk = atk;
+                Def = def;
+                Hp = hp;
                 Explanation = explanation;
+            }
+            public void PrintItemStatDescription(bool withNumber = false, int idx = 0)
+            {
+                Console.Write("- ");
+                if (withNumber)
+                {
+                    Console.ForegroundColor = ConsoleColor.DarkCyan;
+                    Console.Write("{0} ", idx);
+                    Console.ResetColor();
+                }
+                if (Equipment)
+                {
+                    Console.Write("[");
+                    Console.ForegroundColor = ConsoleColor.Red;
+                    Console.Write("E");
+                    Console.ResetColor();
+                    Console.Write("]");
+                }
+                Console.Write(Name);
+                Console.Write(" | ");
+                //(Atk >= 0 ? "+" : "") [조건 ? 조건이 참이면 : 조건이 거짓이면] 삼항연산자
+                if (Atk != 0) Console.Write($"공격력 {(Atk >= 0 ? "+" : "")}{Atk}");
+                if (Def != 0) Console.Write($"방어력 {(Def >= 0 ? "+" : "")}{Def}");
+                if (Hp != 0) Console.Write($"체력 {(Hp >= 0 ? "+" : "")}{Hp}");
+
+                Console.Write(" | ");
+
+                Console.WriteLine(Explanation);
             }
         }
 
-        class Item
-        {
-            public int ItemNumber { get; }
-            public string Name { get; }
-            public string Category { get; }
-            public int Figure { get; }
-            public string Explanation { get; }
-        }
+        
     }
 }
