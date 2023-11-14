@@ -6,10 +6,13 @@ namespace ClassPractice
     {
 
         private static Player player;
-        private static Inventory earlyItem;
+        private static Item item;
 
         static void Main(string[] args)
         {
+            ///구성
+            ///1.초기데이터값세팅
+            ///2.로고 출력
             GameDataSetting();
             PrintStartLogo();
            
@@ -46,7 +49,7 @@ namespace ClassPractice
         static void GameDataSetting()
         {
             player = new Player("□□□", "탐험가", 1, 10, 5, 100, 1500);
-            earlyItem = new Inventory(false,"001","짱돌","공격력", 5, "흔하게 널린 돌");
+            item = new Item(false, 1, "짱돌", "공격력", 5, "흔하게 널린 돌");
         }
         static void PrintStartLogo()
         {
@@ -71,13 +74,13 @@ namespace ClassPractice
             Console.WriteLine();
             Console.WriteLine($"LV.{player.Level}");
             Console.WriteLine($"{player.Name} ({player.Job})");
-            if (!earlyItem.Equipment)
+            if (!item.Equipment)
             {
                 Console.WriteLine($"공격력 : {player.Atk}");
             }
             else
             {
-                Console.WriteLine($"공격력 : {player.Atk}  (+{earlyItem.Figure})");
+                Console.WriteLine($"공격력 : {player.Atk}  (+{item.Figure})");
             }
             Console.WriteLine($"방어력 : {player.Def}");
             Console.WriteLine($"체력 : {player.Hp}");
@@ -102,14 +105,14 @@ namespace ClassPractice
             Console.WriteLine("현재 가지고 있는 물건의 목록입니다.");
             Console.WriteLine();
             Console.WriteLine("이름    |수치        |설명");
-            if (!earlyItem.Equipment)
+            if (!item.Equipment)
             {
-                Console.WriteLine($"{earlyItem.Name}    |{earlyItem.Category} +{earlyItem.Figure}|{earlyItem.Explanation}");
+                Console.WriteLine($"{item.Name}    |{item.Category} +{item.Figure}|{item.Explanation}");
 
             }
             else
             {
-                Console.WriteLine($"[E]{earlyItem.Name}    |{earlyItem.Category} +{earlyItem.Figure}|{earlyItem.Explanation}");
+                Console.WriteLine($"[E]{item.Name}    |{item.Category} +{item.Figure}|{item.Explanation}");
 
             }
             Console.WriteLine();
@@ -140,8 +143,8 @@ namespace ClassPractice
                     if(ret >= min && ret <= max)
                         return ret;
                 }
-
                 Console.WriteLine("잘못된 입력입니다.");
+                Console.WriteLine($"지정된 범위의 숫자를 입력해 주세요.({min}~{max})");
             }
         }
         static void ItemEquipment()
@@ -152,15 +155,15 @@ namespace ClassPractice
             Console.WriteLine("소지하고 있는 장비를 장착하거나 해제합니다.");
             Console.WriteLine();
             Console.WriteLine("이름    |수치        |설명");
-            if (!earlyItem.Equipment)
+            if (!item.Equipment)
             {
-                Console.WriteLine($"{earlyItem.Name}    |{earlyItem.Category} +{earlyItem.Figure}|{earlyItem.Explanation}");
+                Console.WriteLine($"{item.Name}    |{item.Category} +{item.Figure}|{item.Explanation}");
             }
             else
             {
-                Console.WriteLine($"[E]{earlyItem.Name}    |{earlyItem.Category} +{earlyItem.Figure}|{earlyItem.Explanation}");
+                Console.WriteLine($"[E]{item.Name}    |{item.Category} +{item.Figure}|{item.Explanation}");
             }
-            Console.WriteLine($"1. {earlyItem.Name}");
+            Console.WriteLine($"1. {item.Name}");
             Console.WriteLine("0. 돌아가기");
 
             int input = CheckVaildInput(0, 1);
@@ -170,15 +173,15 @@ namespace ClassPractice
                     DisplayInventory();
                     break;
                 case 1:
-                    if (!earlyItem.Equipment)
+                    if (!item.Equipment)
                     {
-                        earlyItem.Equipment = true;
-                        player.Atk += earlyItem.Figure;
+                        item.Equipment = true;
+                        player.Atk += item.Figure;
                     }
                     else
                     {
-                        earlyItem.Equipment = false;
-                        player.Atk -= earlyItem.Figure;
+                        item.Equipment = false;
+                        player.Atk -= item.Figure;
                     }
                     ItemEquipment();
                     break;
@@ -207,16 +210,16 @@ namespace ClassPractice
             }
         }
 
-        class Inventory
+        class Item
         {
             public bool Equipment { get; set; }// 장착여부
-            public string ItemNumber { get; }//아이템 ID
+            public int ItemNumber { get; }//아이템 ID
             public string Name { get; }//아이템 이름
             public string Category { get; }//아이템 분류
             public int Figure { get; }//아이템이 주는 수치
             public string Explanation {  get; }//아이템 설명
 
-            public Inventory (bool equip,string number, string name, string category, int figure, string explanation)
+            public Item (bool equip,int number, string name, string category, int figure, string explanation)
             {
                 Equipment = equip;
                 ItemNumber = number;
@@ -227,13 +230,6 @@ namespace ClassPractice
             }
         }
 
-        class Item
-        {
-            public int ItemNumber { get; }
-            public string Name { get; }
-            public string Category { get; }
-            public int Figure { get; }
-            public string Explanation { get; }
-        }
+        
     }
 }
